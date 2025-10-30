@@ -1,0 +1,7 @@
+CREATE TABLE teams (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    city VARCHAR(100),
+    founded_year INT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
