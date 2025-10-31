@@ -1,0 +1,7 @@
+CREATE TABLE stadiums (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    city VARCHAR(100),
+    capacity INT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
