@@ -21,7 +21,7 @@ async def lifespan(app: FastAPI):
     # Shutdown
     if connection_pool:
         logger.info("Closing connection pool...")
-        # connection_pool.close()  # uncomment if you have a close method
+        # connection_pool.close() 
         logger.info("Connection pool closed")
 
 app = FastAPI(lifespan=lifespan)
