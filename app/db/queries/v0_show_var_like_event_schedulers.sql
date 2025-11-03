@@ -1,0 +1,1 @@
+show variables like 'event_scheduler';
