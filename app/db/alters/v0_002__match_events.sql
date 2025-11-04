@@ -1,0 +1,3 @@
+ALTER TABLE match_events
+ADD COLUMN team_id INT,
+ADD FOREIGN KEY (team_id) REFERENCES teams(id) ON DELETE SET NULL;
