@@ -1,0 +1,3 @@
+This folder contains sample data that was put in 
+C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/
+to --secure-file-priv option that is running
