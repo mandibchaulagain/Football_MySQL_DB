@@ -7,10 +7,7 @@ import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
 from database.connection import connection_pool
 
-
-# -----------------------------
 # FETCH TEAMS
-# -----------------------------
 def fetch_teams():
     conn = connection_pool.get_connection()
     cursor = conn.cursor(dictionary=True)
@@ -21,9 +18,8 @@ def fetch_teams():
     return teams
 
 
-# -----------------------------
-# FIXTURE GENERATION (NO BACK-TO-BACK)
-# -----------------------------
+
+# FIXTURE GENERATION (NO BACK TO BACK)
 def generate_round_robin(teams):
     team_ids = [t["id"] for t in teams]
 
@@ -48,9 +44,8 @@ def generate_round_robin(teams):
     return rounds
 
 
-# -----------------------------
+
 # SCORE SIMULATION
-# -----------------------------
 def simulate_score():
     """
     Returns (home, away) goals using:
@@ -93,9 +88,8 @@ def simulate_score():
     return home, away
 
 
-# -----------------------------
+
 # INSERT MATCH INTO DB
-# -----------------------------
 def insert_match(competition_id, home_id, away_id, stadium_id, match_date, referee_id, home_score, away_score):
     conn = connection_pool.get_connection()
     cursor = conn.cursor()
@@ -122,9 +116,8 @@ def insert_match(competition_id, home_id, away_id, stadium_id, match_date, refer
     conn.close()
 
 
-# -----------------------------
+
 # MAIN
-# -----------------------------
 def main():
     competition_id = 1  # Premier League 23/24
     teams = fetch_teams()
