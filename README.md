@@ -1,5 +1,4 @@
-```markdown
-# ⚽ Football Database Project (MySQL + Python)
+# Football Database Project (MySQL + Python)
 
 A fully-designed end-to-end football league database system built with **MySQL 8** and **Python 3**.  
 This project includes database schema, migrations, materialized views, data seeding, simulation scripts, and CSV loaders.
