@@ -6,3 +6,7 @@ joblib
 numpy
 pandas
 scikit-learn
+uvicorn[standard]
+python-dotenv
+pydantic
+redis
