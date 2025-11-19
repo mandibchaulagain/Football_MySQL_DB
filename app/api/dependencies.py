@@ -1,0 +1,1 @@
+# Shared FastAPI dependencies (DB connection, rate limit, role checks)

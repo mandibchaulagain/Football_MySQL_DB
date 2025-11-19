@@ -1,7 +1,7 @@
 import logging
 from fastapi import FastAPI, HTTPException
 from contextlib import asynccontextmanager
-from database.connection import connection_pool  # your DB connection pool
+from db.connection import connection_pool  # your DB connection pool
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)

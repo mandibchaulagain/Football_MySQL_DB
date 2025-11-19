@@ -1,0 +1,1 @@
+# Player endpoints (CRUD, stats, search, pagination)

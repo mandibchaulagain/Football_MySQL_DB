@@ -5,7 +5,7 @@ import os
 from collections import defaultdict
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
-from database.connection import connection_pool
+from db.connection import connection_pool
 
 
 # -----------------------------------------------------------

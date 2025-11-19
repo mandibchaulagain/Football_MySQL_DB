@@ -1,0 +1,1 @@
+# App settings (DB, JWT secret, token expiry) read from .env

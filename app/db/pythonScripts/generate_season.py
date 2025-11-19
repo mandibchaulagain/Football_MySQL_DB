@@ -5,7 +5,7 @@ import os
 
 # Add the app root directory to sys.path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
-from database.connection import connection_pool
+from db.connection import connection_pool
 
 # FETCH TEAMS
 def fetch_teams():

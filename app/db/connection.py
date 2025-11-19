@@ -1,3 +1,4 @@
+# Direct MySQL connector (no ORM), connection pooling
 import os
 import logging
 import mysql.connector.pooling

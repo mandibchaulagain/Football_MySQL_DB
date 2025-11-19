@@ -1,0 +1,1 @@
+# Schemas for fixture object structures

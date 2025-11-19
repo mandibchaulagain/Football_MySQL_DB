@@ -1,0 +1,1 @@
+# Custom HTTP exceptions and reusable error response format
