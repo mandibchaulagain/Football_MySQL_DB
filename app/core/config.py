@@ -9,7 +9,7 @@ the current working directory and makes them accessible through the `settings`
 object.
 """
 
-from pydantic import BaseSettings
+from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
     DB_HOST: str
