@@ -1,51 +1,54 @@
 # Direct MySQL connector (no ORM), connection pooling
-import os
-import logging
-import mysql.connector.pooling
-from dotenv import load_dotenv
 
-# Configure logging
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+import mysql.connector
+from mysql.connector import pooling, Error
+from fastapi import HTTPException
+from core.config import settings
 
-load_dotenv()
 
-class DatabaseConnectionError(Exception):
-    pass
 
-def get_db_config():
-    """Load database configuration from environment variables"""
-    config = {
-        "host": os.getenv("DB_HOST"),
-        "user": os.getenv("DB_USER"),
-        "password": os.getenv("DB_PASSWORD"),
-        "database": os.getenv("DB_NAME"),
-        "pool_name": "auth_pool",
-        "pool_size": int(os.getenv("DB_POOL_SIZE")),
-        "autocommit": True
-    }
-    if None in [config['user'], config['password'], config['database']]:
-        raise ValueError("Missing required database configuration in .env")
-    return config
-
-def create_connection_pool():
-    """Create and test the MySQL connection pool"""
-    try:
-        config = get_db_config()
-        pool = mysql.connector.pooling.MySQLConnectionPool(**config)
-        # Test connection
-        conn = pool.get_connection()
-        conn.ping(reconnect=True, attempts=3, delay=5)
-        conn.close()
-        logger.info("Database connection pool established successfully")
-        return pool
-    except mysql.connector.Error as err:
-        logger.error(f"Database connection failed: {err}")
-        raise DatabaseConnectionError(f"Could not connect to database: {err}") from err
-
-# Initialize connection pool
+# Create a global MySQL connection pool
 try:
-    connection_pool = create_connection_pool()
-except DatabaseConnectionError as e:
-    logger.critical(f"Critical database error: {e}")
-    connection_pool = None
+    connection_pool = pooling.MySQLConnectionPool(
+        pool_name="main_pool",
+        pool_size=10,  # Enough for dev; scalable later
+        pool_reset_session=True,
+        host=settings.DB_HOST,
+        user=settings.DB_USER,
+        password=settings.DB_PASSWORD,
+        database=settings.DB_NAME,
+        port=settings.DB_PORT,
+        charset="utf8mb4"
+    )
+except Error as e:
+    print("ERROR INITIALIZING DB POOL:", e)
+    raise
+
+# Plain connection getter
+def get_connection():
+    """
+    Returns a pooled MySQL connection.
+    """
+    try:
+        return connection_pool.get_connection()
+    except Error:
+        raise HTTPException(status_code=500, detail="DB connection unavailable")
+
+
+# Dependency for FastAPI routes
+def get_db():
+    """
+    In this function, we first get a TCP connection to the Database(through connection pooling). Then, we make a cursor object in that connection, made to return a dictionary. Cursor is a tool that is used to interact and execute query to the database(named in the sense that it works as a pointer going row by row and allows access to various methods like fetchone() and fetchall(). Then, we yield the cursor. Yield is a keyword that turns a function to a generator, and in essence, it acts as a pause button. The flow is something like this: when the interpreter hits yield, it pauses, then FastAPI injects the cursor as a Dependency Injection through Depends() function in the respective route handler and executes the route function and returns the value(where it just executed a query). Then, it comes back here, and commits the execution, and in case of error, rolls back the execution.)
+    """
+    conn = get_connection() #TCP link to the DB
+    cursor = conn.cursor(dictionary=True)  # tool used to send commands over the connection; return rows as dicts
+
+    try:
+        yield cursor
+        conn.commit()
+    except Exception:
+        conn.rollback()
+        raise
+    finally:
+        cursor.close()
+        conn.close()
